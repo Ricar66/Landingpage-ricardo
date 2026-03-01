@@ -54,7 +54,7 @@ export default function ContactSection() {
       className="relative py-[var(--section-padding)] max-w-[var(--container-max)] mx-auto px-[var(--container-padding)]"
     >
       {/* Section divider */}
-      <div className="section-divider mb-20" />
+      <div className="section-divider mb-12" />
 
       {/* Background glow */}
       <div
@@ -65,7 +65,7 @@ export default function ContactSection() {
       />
 
       {/* Header */}
-      <div className="mb-16">
+      <div className="mb-10">
         <SectionEyebrow>{t.contact.eyebrow}</SectionEyebrow>
         <SectionHeading className="mt-4">{t.contact.heading}</SectionHeading>
         <RevealOnScroll delay={0.2}>
@@ -75,7 +75,7 @@ export default function ContactSection() {
         </RevealOnScroll>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Info side */}
         <motion.div
           variants={staggerContainer}

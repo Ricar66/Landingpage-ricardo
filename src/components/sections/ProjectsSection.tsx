@@ -19,13 +19,13 @@ export default function ProjectsSection() {
       className="relative py-[var(--section-padding)] max-w-[var(--container-max)] mx-auto px-[var(--container-padding)]"
     >
       {/* Section divider */}
-      <div className="section-divider mb-20" />
+      <div className="section-divider mb-12" />
 
       {/* Background dot grid */}
       <div className="absolute inset-0 dot-grid opacity-40 pointer-events-none" />
 
       {/* Header */}
-      <div className="relative mb-16">
+      <div className="relative mb-10">
         <SectionEyebrow>{t.projects.eyebrow}</SectionEyebrow>
         <SectionHeading className="mt-4">{t.projects.heading}</SectionHeading>
         <RevealOnScroll delay={0.2}>

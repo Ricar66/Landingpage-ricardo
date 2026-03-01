@@ -36,7 +36,7 @@
   --text-footnote: 0.875rem;
 
   /* Spacing */
-  --section-padding: clamp(5rem, 12vw, 10rem);
+  --section-padding: clamp(3rem, 6vw, 5rem);
   --container-max: 1440px;
   --container-padding: clamp(1.25rem, 4vw, 2.5rem);
 
@@ -189,6 +189,48 @@ body {
 .section-divider {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2), transparent);
+}
+
+/* Float drift animations for tech field */
+@keyframes float-drift-0 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(20px, -18px); } }
+@keyframes float-drift-1 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-18px, 22px); } }
+@keyframes float-drift-2 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-22px, -16px); } }
+@keyframes float-drift-3 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(16px, 24px); } }
+@keyframes float-drift-4 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(24px, 12px); } }
+@keyframes float-drift-5 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-12px, -24px); } }
+
+/* Floating tech nodes */
+.float-node {
+  z-index: 1;
+  cursor: default;
+}
+
+.float-node:hover {
+  animation-play-state: paused !important;
+  z-index: 10;
+}
+
+.float-node-inner {
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s ease;
+}
+
+.float-node:hover .float-node-inner {
+  transform: translate(-50%, -50%) scale(1.25);
+}
+
+.float-node:hover .float-node-icon {
+  border-color: var(--node-accent, rgba(255,255,255,0.15)) !important;
+  box-shadow: 0 0 25px var(--node-glow, rgba(59,130,246,0.15));
+  background-color: var(--node-bg, rgba(59,130,246,0.08)) !important;
+}
+
+.float-node:hover .float-node-iconcolor {
+  color: var(--node-accent, #3b82f6);
+}
+
+.float-node:hover .float-node-label {
+  color: var(--text-primary);
 }
 
 /* Reduced motion */

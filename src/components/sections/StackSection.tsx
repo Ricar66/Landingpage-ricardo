@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useTranslation } from "@/i18n/LanguageProvider";
 import { skills, skillCategories } from "@/data/skills";
 import type { SkillCategory } from "@/types";
@@ -9,9 +9,8 @@ import SectionHeading from "@/components/atoms/SectionHeading";
 import RevealOnScroll from "@/components/molecules/RevealOnScroll";
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
-import { cn } from "@/lib/utils";
 
-/* ── Orbital config ────────────────────────────────────── */
+/* ── Constants ─────────────────────────────────────────── */
 
 const categoryAccents: Record<string, string> = {
   frontend: "#3B82F6",
@@ -21,69 +20,14 @@ const categoryAccents: Record<string, string> = {
   infra: "#F43F5E",
 };
 
-interface OrbitalNode {
-  name: string;
-  icon: string;
-  category: string;
-  accent: string;
-}
-
-const SIZE = 620;
-const CENTER = SIZE / 2;
-
-const orbits: { radius: number; startAngle: number; items: OrbitalNode[] }[] = [
-  {
-    radius: 105,
-    startAngle: -60,
-    items: [
-      { name: "React", icon: "react", category: "frontend", accent: "#3B82F6" },
-      { name: "TypeScript", icon: "typescript", category: "frontend", accent: "#3B82F6" },
-      { name: "C#", icon: "csharp", category: "backend", accent: "#10B981" },
-      { name: "Next.js", icon: "nextjs", category: "frontend", accent: "#3B82F6" },
-    ],
-  },
-  {
-    radius: 190,
-    startAngle: 10,
-    items: [
-      { name: "Node.js", icon: "nodejs", category: "backend", accent: "#10B981" },
-      { name: "Tailwind", icon: "tailwind", category: "frontend", accent: "#3B82F6" },
-      { name: "Tauri", icon: "tauri", category: "desktop", accent: "#8B5CF6" },
-      { name: ".NET", icon: "dotnet", category: "backend", accent: "#10B981" },
-      { name: "Rust", icon: "rust", category: "desktop", accent: "#8B5CF6" },
-      { name: "Prisma", icon: "prisma", category: "backend", accent: "#10B981" },
-    ],
-  },
-  {
-    radius: 270,
-    startAngle: 25,
-    items: [
-      { name: "Express", icon: "express", category: "backend", accent: "#10B981" },
-      { name: "WPF", icon: "wpf", category: "desktop", accent: "#8B5CF6" },
-      { name: "MySQL", icon: "mysql", category: "database", accent: "#F59E0B" },
-      { name: "SQLite", icon: "sqlite", category: "database", accent: "#F59E0B" },
-      { name: "Git", icon: "git", category: "infra", accent: "#F43F5E" },
-      { name: "Docker", icon: "docker", category: "infra", accent: "#F43F5E" },
-      { name: "Azure", icon: "azure", category: "infra", accent: "#F43F5E" },
-      { name: "Linux", icon: "linux", category: "infra", accent: "#F43F5E" },
-    ],
-  },
+const FLOAT_ANIMS = [
+  "float-drift-0",
+  "float-drift-1",
+  "float-drift-2",
+  "float-drift-3",
+  "float-drift-4",
+  "float-drift-5",
 ];
-
-function getNodePos(
-  orbitRadius: number,
-  startAngle: number,
-  index: number,
-  total: number
-) {
-  const angle = ((startAngle + (index * 360) / total) * Math.PI) / 180;
-  return {
-    x: Math.round((CENTER + orbitRadius * Math.cos(angle)) * 100) / 100,
-    y: Math.round((CENTER + orbitRadius * Math.sin(angle)) * 100) / 100,
-  };
-}
-
-/* ── Mobile grid data ──────────────────────────────────── */
 
 const mobileOrder: SkillCategory[] = [
   "frontend",
@@ -93,7 +37,29 @@ const mobileOrder: SkillCategory[] = [
   "infra",
 ];
 
-/* ── Component ─────────────────────────────────────────── */
+/* ── Deterministic position for SSR safety ────────────── */
+
+function getPosition(index: number, total: number) {
+  const cols = 6;
+  const rows = Math.ceil(total / cols);
+  const col = index % cols;
+  const row = Math.floor(index / cols);
+
+  const xStep = 100 / (cols + 1);
+  const yStep = 100 / (rows + 1);
+  const baseX = xStep * (col + 1);
+  const baseY = yStep * (row + 1);
+
+  const jX = ((index * 17 + 5) % 13 - 6) * 0.6;
+  const jY = ((index * 23 + 11) % 13 - 6) * 0.6;
+
+  return {
+    left: Math.round(Math.min(92, Math.max(8, baseX + jX)) * 100) / 100,
+    top: Math.round(Math.min(90, Math.max(10, baseY + jY)) * 100) / 100,
+  };
+}
+
+/* ── Main component ───────────────────────────────────── */
 
 export default function StackSection() {
   const { t } = useTranslation();
@@ -103,6 +69,9 @@ export default function StackSection() {
       id="stack"
       className="relative py-[var(--section-padding)] max-w-[var(--container-max)] mx-auto px-[var(--container-padding)] overflow-hidden"
     >
+      {/* Section divider */}
+      <div className="section-divider mb-12" />
+
       {/* Background glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] pointer-events-none"
@@ -113,7 +82,7 @@ export default function StackSection() {
       />
 
       {/* Header */}
-      <div className="mb-16 relative">
+      <div className="mb-10 relative">
         <SectionEyebrow>{t.stack.eyebrow}</SectionEyebrow>
         <SectionHeading className="mt-4">{t.stack.heading}</SectionHeading>
         <RevealOnScroll delay={0.2}>
@@ -123,228 +92,88 @@ export default function StackSection() {
         </RevealOnScroll>
       </div>
 
-      {/* Desktop: Orbital Constellation */}
+      {/* Desktop: Floating Field */}
       <div className="hidden lg:block">
-        <OrbitalConstellation t={t} />
+        <FloatingField />
       </div>
 
-      {/* Mobile/Tablet: Enhanced Grid */}
+      {/* Mobile: Grid */}
       <div className="lg:hidden">
         <MobileGrid t={t} />
+      </div>
+
+      {/* Category legend */}
+      <div className="flex flex-wrap justify-center gap-6 mt-10">
+        {Object.entries(categoryAccents).map(([cat, color]) => {
+          const label =
+            t.stack.categories[cat as keyof typeof t.stack.categories] || cat;
+          return (
+            <div
+              key={cat}
+              className="flex items-center gap-2 text-xs font-mono text-text-muted"
+            >
+              <div
+                className="w-2 h-2 rounded-full"
+                style={{
+                  backgroundColor: color,
+                  boxShadow: `0 0 6px ${color}40`,
+                }}
+              />
+              {label}
+            </div>
+          );
+        })}
       </div>
     </section>
   );
 }
 
-/* ── Orbital Constellation (desktop) ───────────────────── */
+/* ── Floating Field (desktop) ─────────────────────────── */
 
-function OrbitalConstellation({ t }: { t: ReturnType<typeof useTranslation>["t"] }) {
-  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
-  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+function FloatingField() {
+  const total = skills.length;
 
   return (
     <RevealOnScroll>
-      <div className="flex flex-col items-center gap-12">
-        {/* The orbital SVG + nodes */}
-        <div
-          className="relative mx-auto"
-          style={{ width: SIZE, height: SIZE, maxWidth: "100%" }}
-        >
-          {/* SVG rings & connecting lines */}
-          <svg
-            className="absolute inset-0 w-full h-full"
-            viewBox={`0 0 ${SIZE} ${SIZE}`}
-            fill="none"
-          >
-            {/* Orbit rings (dashed, rotating) */}
-            {orbits.map((orbit, oi) => (
-              <circle
-                key={oi}
-                cx={CENTER}
-                cy={CENTER}
-                r={orbit.radius}
-                stroke="rgba(255,255,255,0.04)"
-                strokeWidth="1"
-                strokeDasharray="6 12"
-                style={{
-                  animation: `spin-slow ${60 + oi * 30}s linear infinite`,
-                  transformOrigin: `${CENTER}px ${CENTER}px`,
-                }}
-              />
-            ))}
+      <div className="relative w-full" style={{ height: 460 }}>
+        {/* Subtle background grid */}
+        <div className="absolute inset-0 dot-grid opacity-20 rounded-2xl" />
 
-            {/* Connecting lines from center to each node */}
-            {orbits.flatMap((orbit) =>
-              orbit.items.map((item, i) => {
-                const pos = getNodePos(
-                  orbit.radius,
-                  orbit.startAngle,
-                  i,
-                  orbit.items.length
-                );
-                const isActive =
-                  hoveredNode === item.name ||
-                  hoveredCategory === item.category;
-                return (
-                  <line
-                    key={item.name}
-                    x1={CENTER}
-                    y1={CENTER}
-                    x2={pos.x}
-                    y2={pos.y}
-                    stroke={isActive ? `${item.accent}40` : "rgba(255,255,255,0.02)"}
-                    strokeWidth={isActive ? 1.5 : 0.5}
-                    style={{ transition: "all 0.4s ease" }}
-                  />
-                );
-              })
-            )}
-          </svg>
+        {skills.map((skill, i) => {
+          const pos = getPosition(i, total);
+          const accent = categoryAccents[skill.category] || "#666";
+          const animName = FLOAT_ANIMS[i % FLOAT_ANIMS.length];
+          const duration = 14 + (i % 7) * 2.5;
+          const delay = -(i * 1.7);
 
-          {/* Center hub */}
-          <motion.div
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
-            initial={{ scale: 0, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.175, 0.885, 0.32, 1.275] }}
-          >
-            <div className="w-20 h-20 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center relative">
-              {/* Pulse ring */}
-              <div
-                className="absolute inset-[-4px] rounded-full border border-accent/20"
-                style={{ animation: "pulse-glow 3s ease-in-out infinite" }}
-              />
-              <span className="text-lg font-display font-black text-gradient">
-                RM
-              </span>
-            </div>
-          </motion.div>
-
-          {/* Technology nodes */}
-          {orbits.map((orbit, oi) =>
-            orbit.items.map((item, i) => {
-              const pos = getNodePos(
-                orbit.radius,
-                orbit.startAngle,
-                i,
-                orbit.items.length
-              );
-              const isActive =
-                hoveredNode === item.name ||
-                hoveredCategory === item.category;
-              const nodeSize = oi === 0 ? 60 : oi === 1 ? 52 : 46;
-
-              return (
-                <motion.div
-                  key={item.name}
-                  className="absolute z-10 cursor-default"
-                  style={{
-                    left: `${Math.round((pos.x / SIZE) * 10000) / 100}%`,
-                    top: `${Math.round((pos.y / SIZE) * 10000) / 100}%`,
-                    transform: "translate(-50%, -50%)",
-                  }}
-                  initial={{ scale: 0, opacity: 0 }}
-                  whileInView={{ scale: 1, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    delay: 0.3 + oi * 0.15 + i * 0.06,
-                    duration: 0.5,
-                    ease: [0.175, 0.885, 0.32, 1.275],
-                  }}
-                  onMouseEnter={() => {
-                    setHoveredNode(item.name);
-                    setHoveredCategory(item.category);
-                  }}
-                  onMouseLeave={() => {
-                    setHoveredNode(null);
-                    setHoveredCategory(null);
-                  }}
-                >
-                  <div
-                    className="flex flex-col items-center gap-1.5 transition-all duration-300"
-                    style={{
-                      width: nodeSize,
-                      transform: isActive ? "scale(1.15)" : "scale(1)",
-                      filter: isActive
-                        ? `drop-shadow(0 0 12px ${item.accent}50)`
-                        : "none",
-                    }}
-                  >
-                    {/* Node circle */}
-                    <div
-                      className="rounded-xl flex items-center justify-center transition-all duration-300"
-                      style={{
-                        width: nodeSize * 0.7,
-                        height: nodeSize * 0.7,
-                        backgroundColor: isActive
-                          ? `${item.accent}20`
-                          : "rgba(17,17,17,0.8)",
-                        border: `1px solid ${
-                          isActive ? `${item.accent}50` : "rgba(255,255,255,0.06)"
-                        }`,
-                        boxShadow: isActive
-                          ? `0 0 20px ${item.accent}25`
-                          : "none",
-                      }}
-                    >
-                      <div
-                        className="transition-colors duration-300"
-                        style={{
-                          color: isActive ? item.accent : "rgba(255,255,255,0.5)",
-                          width: oi === 0 ? 22 : 18,
-                          height: oi === 0 ? 22 : 18,
-                        }}
-                      >
-                        <SkillIcon icon={item.icon} size={oi === 0 ? 22 : 18} />
-                      </div>
-                    </div>
-                    {/* Label */}
-                    <span
-                      className="text-center font-mono leading-none whitespace-nowrap transition-all duration-300"
-                      style={{
-                        fontSize: oi === 0 ? 11 : 10,
-                        color: isActive ? item.accent : "rgba(255,255,255,0.35)",
-                      }}
-                    >
-                      {item.name}
-                    </span>
+          return (
+            <div
+              key={skill.name}
+              className="float-node absolute"
+              style={
+                {
+                  left: `${pos.left}%`,
+                  top: `${pos.top}%`,
+                  animation: `${animName} ${duration}s ease-in-out infinite ${delay}s`,
+                  "--node-accent": accent,
+                  "--node-glow": `${accent}35`,
+                  "--node-bg": `${accent}12`,
+                } as React.CSSProperties
+              }
+            >
+              <div className="float-node-inner flex flex-col items-center gap-1.5">
+                <div className="float-node-icon w-12 h-12 rounded-xl flex items-center justify-center border bg-[rgba(17,17,17,0.7)] border-white/[0.06]">
+                  <div className="float-node-iconcolor w-6 h-6 text-text-muted">
+                    <SkillIcon icon={skill.icon} size={24} />
                   </div>
-                </motion.div>
-              );
-            })
-          )}
-        </div>
-
-        {/* Category legend */}
-        <div className="flex flex-wrap justify-center gap-6">
-          {Object.entries(categoryAccents).map(([cat, color]) => {
-            const label =
-              t.stack.categories[cat as keyof typeof t.stack.categories] ||
-              cat;
-            return (
-              <button
-                type="button"
-                key={cat}
-                className="flex items-center gap-2 text-xs font-mono text-text-muted hover:text-text-secondary transition-colors cursor-default"
-                onMouseEnter={() => setHoveredCategory(cat)}
-                onMouseLeave={() => setHoveredCategory(null)}
-              >
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{
-                    backgroundColor: color,
-                    boxShadow:
-                      hoveredCategory === cat
-                        ? `0 0 8px ${color}60`
-                        : "none",
-                  }}
-                />
-                {label}
-              </button>
-            );
-          })}
-        </div>
+                </div>
+                <span className="float-node-label text-[10px] font-mono text-text-muted/60 whitespace-nowrap">
+                  {skill.name}
+                </span>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </RevealOnScroll>
   );
@@ -352,7 +181,11 @@ function OrbitalConstellation({ t }: { t: ReturnType<typeof useTranslation>["t"]
 
 /* ── Mobile Grid ───────────────────────────────────────── */
 
-function MobileGrid({ t }: { t: ReturnType<typeof useTranslation>["t"] }) {
+function MobileGrid({
+  t,
+}: {
+  t: ReturnType<typeof useTranslation>["t"];
+}) {
   const grouped = mobileOrder.reduce(
     (acc, cat) => {
       acc[cat] = skills.filter((s) => s.category === cat);

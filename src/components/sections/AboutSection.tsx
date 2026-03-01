@@ -34,16 +34,16 @@ export default function AboutSection() {
       className="relative py-[var(--section-padding)] max-w-[var(--container-max)] mx-auto px-[var(--container-padding)]"
     >
       {/* Section divider at top */}
-      <div className="section-divider mb-20" />
+      <div className="section-divider mb-12" />
 
       {/* Header */}
-      <div className="mb-16">
+      <div className="mb-10">
         <SectionEyebrow>{t.about.eyebrow}</SectionEyebrow>
         <SectionHeading className="mt-4">{t.about.heading}</SectionHeading>
       </div>
 
       {/* Main layout: Services left | About me center+right */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-20">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-14">
         {/* Services column with vertical line (inspired by Jensen Omega) */}
         <motion.div
           className="lg:col-span-3"
@@ -157,9 +157,9 @@ export default function AboutSection() {
       </RevealOnScroll>
 
       {/* Timeline - Alternating Layout */}
-      <div className="mt-20">
+      <div className="mt-14">
         <RevealOnScroll>
-          <h3 className="text-[var(--text-subheading)] font-display font-bold text-text-primary mb-14 text-center md:text-left">
+          <h3 className="text-[var(--text-subheading)] font-display font-bold text-text-primary mb-10 text-center md:text-left">
             {t.about.timelineTitle}
           </h3>
         </RevealOnScroll>
