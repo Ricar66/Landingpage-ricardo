@@ -49,13 +49,39 @@ export default function HeroSection() {
       {/* Dot grid background with parallax */}
       <motion.div className="absolute inset-0 dot-grid" style={{ y: bgY }} />
 
-      {/* Ambient glow */}
-      <div
-        className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[900px] md:h-[900px] pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)",
-        }}
-      />
+      {/* Mesh gradient — multi-blob background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Blue blob — top left */}
+        <motion.div
+          className="absolute -top-[20%] -left-[10%] w-[600px] h-[600px] md:w-[900px] md:h-[900px] rounded-full"
+          style={{
+            background: "radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)",
+            filter: "blur(80px)",
+          }}
+          animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+        />
+        {/* Purple blob — center right */}
+        <motion.div
+          className="absolute top-[10%] -right-[15%] w-[500px] h-[500px] md:w-[700px] md:h-[700px] rounded-full"
+          style={{
+            background: "radial-gradient(circle, rgba(139,92,246,0.10) 0%, transparent 70%)",
+            filter: "blur(80px)",
+          }}
+          animate={{ x: [0, -30, 0], y: [0, 40, 0] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        />
+        {/* Cyan blob — bottom left */}
+        <motion.div
+          className="absolute -bottom-[10%] left-[10%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full"
+          style={{
+            background: "radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%)",
+            filter: "blur(80px)",
+          }}
+          animate={{ x: [0, 35, 0], y: [0, -25, 0] }}
+          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+        />
+      </div>
 
       {/* Floating geometric shapes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
