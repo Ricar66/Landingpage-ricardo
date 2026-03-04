@@ -1,13 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "@/i18n/LanguageProvider";
 import { skills, skillCategories } from "@/data/skills";
 import type { SkillCategory } from "@/types";
 import SectionEyebrow from "@/components/atoms/SectionEyebrow";
 import SectionHeading from "@/components/atoms/SectionHeading";
 import RevealOnScroll from "@/components/molecules/RevealOnScroll";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 /* ── Constants ─────────────────────────────────────────── */
@@ -132,12 +132,42 @@ export default function StackSection() {
 
 function FloatingField() {
   const total = skills.length;
+  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
 
   return (
     <RevealOnScroll>
       <div className="relative w-full" style={{ height: 460 }}>
-        {/* Subtle background grid */}
-        <div className="absolute inset-0 dot-grid opacity-20 rounded-2xl" />
+        {/* Animated grid background */}
+        <div className="absolute inset-0 animated-grid rounded-2xl" />
+
+        {/* Subtle connection lines between same-category nodes */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ height: 460 }}>
+          {Object.keys(categoryAccents).map((cat) => {
+            const catSkills = skills
+              .map((s, i) => ({ ...s, pos: getPosition(i, total) }))
+              .filter((s) => s.category === cat);
+
+            if (catSkills.length < 2) return null;
+
+            return catSkills.slice(0, -1).map((skill, i) => {
+              const next = catSkills[i + 1];
+              const accent = categoryAccents[cat];
+              return (
+                <line
+                  key={`${skill.name}-${next.name}`}
+                  x1={`${skill.pos.left}%`}
+                  y1={`${skill.pos.top}%`}
+                  x2={`${next.pos.left}%`}
+                  y2={`${next.pos.top}%`}
+                  stroke={accent}
+                  strokeWidth="0.5"
+                  strokeOpacity="0.08"
+                  strokeDasharray="4 8"
+                />
+              );
+            });
+          })}
+        </svg>
 
         {skills.map((skill, i) => {
           const pos = getPosition(i, total);
@@ -145,6 +175,7 @@ function FloatingField() {
           const animName = FLOAT_ANIMS[i % FLOAT_ANIMS.length];
           const duration = 14 + (i % 7) * 2.5;
           const delay = -(i * 1.7);
+          const isHovered = hoveredSkill === skill.name;
 
           return (
             <div
@@ -160,8 +191,10 @@ function FloatingField() {
                   "--node-bg": `${accent}12`,
                 } as React.CSSProperties
               }
+              onMouseEnter={() => setHoveredSkill(skill.name)}
+              onMouseLeave={() => setHoveredSkill(null)}
             >
-              <div className="float-node-inner flex flex-col items-center gap-1.5">
+              <div className="float-node-inner flex flex-col items-center gap-1.5 relative">
                 <div className="float-node-icon w-12 h-12 rounded-xl flex items-center justify-center border bg-[rgba(17,17,17,0.7)] border-white/[0.06]">
                   <div className="float-node-iconcolor w-6 h-6 text-text-muted">
                     <SkillIcon icon={skill.icon} size={24} />
@@ -170,6 +203,27 @@ function FloatingField() {
                 <span className="float-node-label text-[10px] font-mono text-text-muted/60 whitespace-nowrap">
                   {skill.name}
                 </span>
+
+                {/* Tooltip on hover */}
+                <AnimatePresence>
+                  {isHovered && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 5, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 5, scale: 0.95 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-lg text-[10px] font-mono whitespace-nowrap z-50 border"
+                      style={{
+                        backgroundColor: "rgba(17,17,17,0.95)",
+                        borderColor: `${accent}30`,
+                        color: accent,
+                        boxShadow: `0 4px 16px ${accent}15`,
+                      }}
+                    >
+                      {skill.category.charAt(0).toUpperCase() + skill.category.slice(1)}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           );

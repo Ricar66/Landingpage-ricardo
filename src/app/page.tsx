@@ -8,6 +8,7 @@ import AboutSection from "@/components/sections/AboutSection";
 import ProjectsSection from "@/components/sections/ProjectsSection";
 import StackSection from "@/components/sections/StackSection";
 import ContactSection from "@/components/sections/ContactSection";
+import CTASection from "@/components/sections/CTASection";
 
 const ScrollProgress = dynamic(
   () => import("@/components/atoms/ScrollProgress"),
@@ -30,6 +31,7 @@ export default function Home() {
         <HeroSection />
         <AboutSection />
         <ProjectsSection />
+        <CTASection />
         <StackSection />
         <ContactSection />
       </main>

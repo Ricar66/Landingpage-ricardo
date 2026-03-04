@@ -10,7 +10,7 @@ import MagneticWrapper from "@/components/molecules/MagneticWrapper";
 import Button from "@/components/atoms/Button";
 import Image from "next/image";
 import { ArrowDown, Download } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const marqueeItems = [
   "REACT",
@@ -32,6 +32,7 @@ const techStack = [
 export default function HeroSection() {
   const { t } = useTranslation();
   const ref = useRef<HTMLElement>(null);
+  const [videoLoaded, setVideoLoaded] = useState(false);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
@@ -46,16 +47,49 @@ export default function HeroSection() {
       id="hero"
       className="relative min-h-screen flex flex-col justify-center overflow-hidden"
     >
-      {/* Dot grid background with parallax */}
-      <motion.div className="absolute inset-0 dot-grid" style={{ y: bgY }} />
+      {/* Video Background */}
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/images/Design sem nome.png"
+          onLoadedData={() => setVideoLoaded(true)}
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{
+            animation: videoLoaded ? "video-fade-in 1.5s ease-out forwards" : undefined,
+            opacity: videoLoaded ? 1 : 0,
+          }}
+        >
+          <source src="/images/download.mp4" type="video/mp4" />
+        </video>
+        {/* Poster fallback while video loads */}
+        {!videoLoaded && (
+          <Image
+            src="/images/Design sem nome.png"
+            alt=""
+            fill
+            className="object-cover"
+            priority
+          />
+        )}
+        {/* Heavy dark overlay for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/90" />
+        {/* Side vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,black_100%)]" />
+      </div>
 
-      {/* Mesh gradient — multi-blob background */}
+      {/* Dot grid background with parallax */}
+      <motion.div className="absolute inset-0 dot-grid opacity-30" style={{ y: bgY }} />
+
+      {/* Mesh gradient — multi-blob background (reduced opacity to blend with video) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Blue blob — top left */}
         <motion.div
           className="absolute -top-[20%] -left-[10%] w-[600px] h-[600px] md:w-[900px] md:h-[900px] rounded-full"
           style={{
-            background: "radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(59,130,246,0.10) 0%, transparent 70%)",
             filter: "blur(80px)",
           }}
           animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
@@ -65,7 +99,7 @@ export default function HeroSection() {
         <motion.div
           className="absolute top-[10%] -right-[15%] w-[500px] h-[500px] md:w-[700px] md:h-[700px] rounded-full"
           style={{
-            background: "radial-gradient(circle, rgba(139,92,246,0.10) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(139,92,246,0.07) 0%, transparent 70%)",
             filter: "blur(80px)",
           }}
           animate={{ x: [0, -30, 0], y: [0, 40, 0] }}
@@ -75,7 +109,7 @@ export default function HeroSection() {
         <motion.div
           className="absolute -bottom-[10%] left-[10%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full"
           style={{
-            background: "radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(6,182,212,0.05) 0%, transparent 70%)",
             filter: "blur(80px)",
           }}
           animate={{ x: [0, 35, 0], y: [0, -25, 0] }}
@@ -86,7 +120,7 @@ export default function HeroSection() {
       {/* Floating geometric shapes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute top-[15%] right-[8%] w-20 h-20 md:w-28 md:h-28 opacity-[0.05]"
+          className="absolute top-[15%] right-[8%] w-20 h-20 md:w-28 md:h-28 opacity-[0.07]"
           animate={{ y: [-10, 10, -10], rotate: [0, 5, 0] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         >
@@ -96,7 +130,7 @@ export default function HeroSection() {
         </motion.div>
 
         <motion.div
-          className="absolute bottom-[30%] left-[5%] w-16 h-16 rounded-full border border-white/[0.03]"
+          className="absolute bottom-[30%] left-[5%] w-16 h-16 rounded-full border border-white/[0.04]"
           animate={{ y: [5, -15, 5], scale: [1, 1.05, 1] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -281,7 +315,7 @@ export default function HeroSection() {
 
         {/* Tech stack horizontal list */}
         <motion.div
-          className="mt-16 md:mt-20 pt-8 border-t border-border-subtle"
+          className="mt-16 md:mt-20 pt-8 border-t border-white/[0.06]"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.6 }}

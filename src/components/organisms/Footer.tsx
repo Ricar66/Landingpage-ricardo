@@ -18,7 +18,15 @@ export default function Footer() {
   };
 
   return (
-    <footer className="border-t border-border-subtle bg-bg-secondary">
+    <footer className="relative border-t border-border-subtle bg-bg-secondary">
+      {/* Gradient border glow on top */}
+      <div
+        className="absolute top-0 left-0 right-0 h-px"
+        style={{
+          background: "linear-gradient(90deg, transparent, rgba(59,130,246,0.3), rgba(139,92,246,0.3), transparent)",
+        }}
+      />
+
       <div className="max-w-[var(--container-max)] mx-auto px-[var(--container-padding)] py-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Left */}
@@ -29,7 +37,7 @@ export default function Footer() {
             <span>{t.footer.rights}</span>
           </div>
 
-          {/* Center - Social */}
+          {/* Center - Social with hover glow */}
           <div className="flex items-center gap-4">
             {profile.socialLinks.map((link) => {
               const Icon = iconMap[link.icon] || Globe;
@@ -40,7 +48,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={link.name}
-                  className="text-text-muted hover:text-accent transition-colors duration-200"
+                  className="text-text-muted hover:text-accent hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.4)] transition-all duration-300"
                 >
                   <Icon size={18} />
                 </a>
@@ -51,10 +59,10 @@ export default function Footer() {
           {/* Right - Back to top */}
           <button
             onClick={scrollToTop}
-            className="flex items-center gap-2 text-sm text-text-muted hover:text-text-primary transition-colors duration-200"
+            className="group flex items-center gap-2 text-sm text-text-muted hover:text-text-primary transition-colors duration-200"
             aria-label="Back to top"
           >
-            <ArrowUp size={16} />
+            <ArrowUp size={16} className="group-hover:-translate-y-0.5 transition-transform duration-200" />
           </button>
         </div>
 

@@ -56,16 +56,24 @@ export default function ContactSection() {
       {/* Section divider */}
       <div className="section-divider mb-12" />
 
-      {/* Background glow */}
-      <div
-        className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(59,130,246,0.04) 0%, transparent 70%)",
-        }}
-      />
+      {/* Background mesh gradient */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div
+          className="absolute top-0 right-0 w-[600px] h-[600px]"
+          style={{
+            background: "radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute bottom-0 left-0 w-[400px] h-[400px]"
+          style={{
+            background: "radial-gradient(circle, rgba(139,92,246,0.04) 0%, transparent 70%)",
+          }}
+        />
+      </div>
 
       {/* Header */}
-      <div className="mb-10">
+      <div className="mb-10 relative">
         <SectionEyebrow>{t.contact.eyebrow}</SectionEyebrow>
         <SectionHeading className="mt-4">{t.contact.heading}</SectionHeading>
         <RevealOnScroll delay={0.2}>
@@ -75,7 +83,7 @@ export default function ContactSection() {
         </RevealOnScroll>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 relative">
         {/* Info side */}
         <motion.div
           variants={staggerContainer}
@@ -85,9 +93,9 @@ export default function ContactSection() {
           className="space-y-8"
         >
           {/* Email */}
-          <motion.div variants={fadeInUp} className="flex items-start gap-4">
+          <motion.div variants={fadeInUp} className="group flex items-start gap-4 p-4 rounded-xl border border-transparent hover:border-border-subtle hover:bg-bg-card/30 transition-all duration-300">
             <div
-              className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border"
+              className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 group-hover:scale-110"
               style={{
                 backgroundColor: "rgba(59,130,246,0.08)",
                 borderColor: "rgba(59,130,246,0.15)",
@@ -109,9 +117,9 @@ export default function ContactSection() {
           </motion.div>
 
           {/* Location */}
-          <motion.div variants={fadeInUp} className="flex items-start gap-4">
+          <motion.div variants={fadeInUp} className="group flex items-start gap-4 p-4 rounded-xl border border-transparent hover:border-border-subtle hover:bg-bg-card/30 transition-all duration-300">
             <div
-              className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border"
+              className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 group-hover:scale-110"
               style={{
                 backgroundColor: "rgba(16,185,129,0.08)",
                 borderColor: "rgba(16,185,129,0.15)",
@@ -130,7 +138,7 @@ export default function ContactSection() {
           </motion.div>
 
           {/* Social */}
-          <motion.div variants={fadeInUp}>
+          <motion.div variants={fadeInUp} className="p-4">
             <p className="text-sm font-mono text-text-muted uppercase tracking-wider mb-4">
               {t.contact.info.social}
             </p>
@@ -144,7 +152,7 @@ export default function ContactSection() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={link.name}
-                    className="w-11 h-11 rounded-xl bg-bg-card border border-border-subtle flex items-center justify-center text-text-muted hover:text-accent hover:border-accent/30 hover:bg-accent/5 transition-all duration-300"
+                    className="w-11 h-11 rounded-xl bg-bg-card border border-border-subtle flex items-center justify-center text-text-muted hover:text-accent hover:border-accent/30 hover:bg-accent/5 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)] transition-all duration-300"
                   >
                     <Icon size={18} />
                   </a>
@@ -158,10 +166,18 @@ export default function ContactSection() {
         <RevealOnScroll>
           <form
             onSubmit={handleSubmit}
-            className="space-y-6 p-6 md:p-8 rounded-2xl border border-border-subtle bg-bg-card/30"
+            className="relative space-y-6 p-6 md:p-8 rounded-2xl border border-border-subtle bg-bg-card/30 overflow-hidden"
           >
+            {/* Form glow effect */}
+            <div
+              className="absolute -top-32 -right-32 w-64 h-64 pointer-events-none"
+              style={{
+                background: "radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)",
+              }}
+            />
+
             {/* Name */}
-            <div>
+            <div className="relative">
               <label
                 htmlFor="name"
                 className="block text-sm font-mono text-text-muted uppercase tracking-wider mb-2"
@@ -173,12 +189,13 @@ export default function ContactSection() {
                 name="name"
                 type="text"
                 required
-                className="w-full bg-bg-primary/50 border border-border-subtle rounded-xl px-4 py-3.5 text-text-primary placeholder:text-text-muted/40 focus:outline-none focus:border-accent/50 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.08),0_0_20px_rgba(59,130,246,0.05)] transition-all duration-300 font-display"
+                placeholder={t.contact.form.namePlaceholder || ""}
+                className="w-full bg-bg-primary/50 border border-border-subtle rounded-xl px-4 py-3.5 text-text-primary placeholder:text-text-muted/30 focus:outline-none focus:border-accent/50 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.08),0_0_20px_rgba(59,130,246,0.05)] transition-all duration-300 font-display"
               />
             </div>
 
             {/* Email */}
-            <div>
+            <div className="relative">
               <label
                 htmlFor="email"
                 className="block text-sm font-mono text-text-muted uppercase tracking-wider mb-2"
@@ -190,12 +207,13 @@ export default function ContactSection() {
                 name="email"
                 type="email"
                 required
-                className="w-full bg-bg-primary/50 border border-border-subtle rounded-xl px-4 py-3.5 text-text-primary placeholder:text-text-muted/40 focus:outline-none focus:border-accent/50 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.08),0_0_20px_rgba(59,130,246,0.05)] transition-all duration-300 font-display"
+                placeholder={t.contact.form.emailPlaceholder || ""}
+                className="w-full bg-bg-primary/50 border border-border-subtle rounded-xl px-4 py-3.5 text-text-primary placeholder:text-text-muted/30 focus:outline-none focus:border-accent/50 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.08),0_0_20px_rgba(59,130,246,0.05)] transition-all duration-300 font-display"
               />
             </div>
 
             {/* Message */}
-            <div>
+            <div className="relative">
               <label
                 htmlFor="message"
                 className="block text-sm font-mono text-text-muted uppercase tracking-wider mb-2"
@@ -207,7 +225,8 @@ export default function ContactSection() {
                 name="message"
                 rows={5}
                 required
-                className="w-full bg-bg-primary/50 border border-border-subtle rounded-xl px-4 py-3.5 text-text-primary placeholder:text-text-muted/40 focus:outline-none focus:border-accent/50 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.08),0_0_20px_rgba(59,130,246,0.05)] transition-all duration-300 font-display resize-none"
+                placeholder={t.contact.form.messagePlaceholder || ""}
+                className="w-full bg-bg-primary/50 border border-border-subtle rounded-xl px-4 py-3.5 text-text-primary placeholder:text-text-muted/30 focus:outline-none focus:border-accent/50 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.08),0_0_20px_rgba(59,130,246,0.05)] transition-all duration-300 font-display resize-none"
               />
             </div>
 
@@ -218,21 +237,47 @@ export default function ContactSection() {
                 disabled={status === "sending"}
                 className="w-full justify-center"
               >
-                {status === "sending" ? t.contact.form.sending : t.contact.form.send}
-                <Send size={16} />
+                {status === "sending" ? (
+                  <>
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
+                    />
+                    {t.contact.form.sending}
+                  </>
+                ) : (
+                  <>
+                    {t.contact.form.send}
+                    <motion.div
+                      whileHover={{ x: 3, y: -3 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Send size={16} />
+                    </motion.div>
+                  </>
+                )}
               </Button>
             </MagneticWrapper>
 
             {/* Status messages */}
             {status === "success" && (
-              <p className="text-sm text-green-400 text-center">
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-sm text-[#10B981] text-center p-3 rounded-lg border border-[#10B981]/20 bg-[#10B981]/5"
+              >
                 {t.contact.form.success}
-              </p>
+              </motion.p>
             )}
             {status === "error" && (
-              <p className="text-sm text-red-400 text-center">
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-sm text-[#F43F5E] text-center p-3 rounded-lg border border-[#F43F5E]/20 bg-[#F43F5E]/5"
+              >
                 {t.contact.form.error}
-              </p>
+              </motion.p>
             )}
           </form>
         </RevealOnScroll>

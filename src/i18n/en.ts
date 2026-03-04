@@ -70,6 +70,14 @@ const en: Translations = {
     },
   },
 
+  cta: {
+    eyebrow: "LET'S WORK TOGETHER",
+    heading: "Have a project in mind?",
+    description:
+      "I'm always open to new challenges and opportunities. Let's build something amazing together.",
+    button: "Get in touch",
+  },
+
   contact: {
     eyebrow: "CONTACT",
     heading: "Let's talk",
@@ -79,6 +87,9 @@ const en: Translations = {
       name: "Name",
       email: "Email",
       message: "Message",
+      namePlaceholder: "your full name",
+      emailPlaceholder: "your@email.com",
+      messagePlaceholder: "tell me about your project...",
       send: "Send Message",
       sending: "Sending...",
       success: "Message sent successfully!",

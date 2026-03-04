@@ -44,7 +44,7 @@ export default function AboutSection() {
 
       {/* Main layout: Services left | About me center+right */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-14">
-        {/* Services column with vertical line (inspired by Jensen Omega) */}
+        {/* Services column — visible on all screens */}
         <motion.div
           className="lg:col-span-3"
           variants={staggerContainer}
@@ -53,29 +53,32 @@ export default function AboutSection() {
           viewport={{ once: true }}
         >
           <div className="relative pl-6 border-l border-border-subtle">
-            {services.map((service, i) => {
+            {services.map((service) => {
               const Icon = service.icon;
               return (
                 <motion.div
                   key={service.labelKey}
                   variants={fadeInUp}
-                  className="relative mb-8 last:mb-0"
+                  className="group relative mb-8 last:mb-0"
                 >
                   {/* Dot on the line */}
                   <div
-                    className="absolute -left-[25px] top-1 w-2 h-2 rounded-full"
+                    className="absolute -left-[25px] top-1 w-2 h-2 rounded-full transition-shadow duration-300"
                     style={{
                       backgroundColor: service.accent,
                       boxShadow: `0 0 8px ${service.accent}50`,
                     }}
                   />
                   <div className="flex items-center gap-3 mb-1">
-                    <div
-                      className="w-9 h-9 rounded-lg flex items-center justify-center"
+                    <motion.div
+                      className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110"
                       style={{ backgroundColor: `${service.accent}15` }}
+                      whileHover={{
+                        boxShadow: `0 0 20px ${service.accent}30`,
+                      }}
                     >
                       <Icon size={18} style={{ color: service.accent }} />
-                    </div>
+                    </motion.div>
                     <span className="text-sm font-display font-semibold text-text-primary">
                       {t.about.services[service.labelKey]}
                     </span>
@@ -109,10 +112,20 @@ export default function AboutSection() {
             </motion.div>
           </div>
 
-          {/* Photo */}
+          {/* Photo with decorative background image */}
           <RevealOnScroll className="md:col-span-2 flex justify-center md:justify-end">
             <div className="relative">
-              <div className="w-56 h-56 md:w-64 md:h-64 rounded-2xl bg-bg-elevated border border-border-subtle overflow-hidden">
+              {/* Decorative background image (blurred) */}
+              <div className="absolute -inset-6 -z-10 rounded-3xl overflow-hidden opacity-20">
+                <Image
+                  src="/images/Design sem nome.png"
+                  alt=""
+                  width={400}
+                  height={400}
+                  className="w-full h-full object-cover blur-xl"
+                />
+              </div>
+              <div className="w-56 h-56 md:w-64 md:h-64 rounded-2xl bg-bg-elevated border border-border-subtle overflow-hidden glow-card">
                 <Image
                   src="/images/avatar.webp"
                   alt="Ricardo De Marco Moretti"
@@ -135,7 +148,7 @@ export default function AboutSection() {
         </div>
       </div>
 
-      {/* Stats - with accent-colored numbers */}
+      {/* Stats - with accent-colored numbers and hover glow */}
       <RevealOnScroll>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-12 border-y border-border-subtle relative">
           {/* Subtle glow behind stats */}
@@ -146,12 +159,20 @@ export default function AboutSection() {
             }}
           />
           {stats.map((stat) => (
-            <AnimatedCounter
-              key={stat.label}
-              target={stat.target}
-              suffix={stat.suffix}
-              label={stat.label}
-            />
+            <div key={stat.label} className="group relative">
+              {/* Hover glow effect */}
+              <div
+                className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{
+                  background: "radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)",
+                }}
+              />
+              <AnimatedCounter
+                target={stat.target}
+                suffix={stat.suffix}
+                label={stat.label}
+              />
+            </div>
           ))}
         </div>
       </RevealOnScroll>
@@ -164,7 +185,7 @@ export default function AboutSection() {
           </h3>
         </RevealOnScroll>
 
-        {/* ── Mobile: simple left-aligned timeline ── */}
+        {/* Mobile: simple left-aligned timeline */}
         <div className="md:hidden relative">
           <div
             className="absolute left-4 top-0 bottom-0 w-px"
@@ -202,7 +223,7 @@ export default function AboutSection() {
           </motion.div>
         </div>
 
-        {/* ── Desktop: alternating left/right timeline ── */}
+        {/* Desktop: alternating left/right timeline */}
         <div className="hidden md:block relative">
           {/* Central line */}
           <div

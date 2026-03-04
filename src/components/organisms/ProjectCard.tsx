@@ -75,11 +75,89 @@ export default function ProjectCard({
             }}
           />
 
+          {/* Visual Preview Area — window frame mock */}
+          <div className="relative overflow-hidden">
+            {/* Window frame header (macOS style) */}
+            <div className="window-frame border-b border-white/[0.04] bg-white/[0.02]">
+              <div className="window-frame-dot" style={{ backgroundColor: "#FF5F56" }} />
+              <div className="window-frame-dot" style={{ backgroundColor: "#FFBD2E" }} />
+              <div className="window-frame-dot" style={{ backgroundColor: "#27C93F" }} />
+              <span className="ml-3 text-[10px] font-mono text-text-muted/40 truncate">
+                {project.demoUrl || project.title.toLowerCase() + ".app"}
+              </span>
+            </div>
+
+            {/* Gradient visual placeholder */}
+            <div
+              className={cn(
+                "relative overflow-hidden transition-transform duration-700 group-hover:scale-105",
+                featured ? "h-48 md:h-56" : "h-32"
+              )}
+            >
+              {/* Featured card: video background */}
+              {featured ? (
+                <>
+                  <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-700"
+                  >
+                    <source src="/images/Design sem nome.mp4" type="video/mp4" />
+                  </video>
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background: `linear-gradient(135deg, ${accent}30 0%, transparent 50%, ${accent}10 100%)`,
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  {/* Colorful gradient based on project accent */}
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background: `linear-gradient(135deg, ${accent}20 0%, ${accent}05 40%, rgba(0,0,0,0.8) 100%)`,
+                    }}
+                  />
+                  {/* Dot grid overlay */}
+                  <div className="absolute inset-0 dot-grid opacity-30" />
+                </>
+              )}
+
+              {/* Bottom fade to card bg */}
+              <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
+
+              {/* Decorative code lines */}
+              <div className="absolute inset-0 p-4 opacity-20 group-hover:opacity-30 transition-opacity duration-500">
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <div className="h-2 rounded-full bg-white/20" style={{ width: "30%" }} />
+                    <div className="h-2 rounded-full" style={{ width: "20%", backgroundColor: `${accent}40` }} />
+                  </div>
+                  <div className="flex gap-2 pl-4">
+                    <div className="h-2 rounded-full bg-white/10" style={{ width: "40%" }} />
+                    <div className="h-2 rounded-full bg-white/15" style={{ width: "15%" }} />
+                  </div>
+                  <div className="flex gap-2 pl-4">
+                    <div className="h-2 rounded-full" style={{ width: "25%", backgroundColor: `${accent}25` }} />
+                    <div className="h-2 rounded-full bg-white/10" style={{ width: "35%" }} />
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="h-2 rounded-full bg-white/15" style={{ width: "20%" }} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Content */}
-          <div className={cn("relative p-6 md:p-8 flex flex-col h-full", featured && "justify-between")}>
+          <div className={cn("relative p-6 md:p-8 flex flex-col", featured ? "flex-1 justify-between" : "flex-1")}>
             <div>
               {/* Number + Featured label */}
-              <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <span
                     className="text-xs font-mono font-bold tracking-wider"
@@ -121,7 +199,7 @@ export default function ProjectCard({
               {/* Description */}
               <p
                 className={cn(
-                  "text-text-secondary/80 leading-relaxed mb-6",
+                  "text-text-secondary/80 leading-relaxed mb-5",
                   featured ? "text-base" : "text-sm"
                 )}
               >
@@ -130,7 +208,7 @@ export default function ProjectCard({
 
               {/* Highlights (featured only) */}
               {featured && project.highlights.length > 0 && (
-                <ul className="space-y-2.5 mb-6">
+                <ul className="space-y-2.5 mb-5">
                   {project.highlights.slice(0, 4).map((h, i) => (
                     <li key={i} className="text-sm text-text-muted flex items-start gap-3">
                       <span
@@ -146,9 +224,9 @@ export default function ProjectCard({
 
             {/* Footer */}
             <div>
-              <div className="h-px bg-white/[0.04] mb-5" />
+              <div className="h-px bg-white/[0.04] mb-4" />
 
-              <div className="flex flex-wrap gap-2 mb-5">
+              <div className="flex flex-wrap gap-2 mb-4">
                 {project.technologies
                   .slice(0, featured ? 8 : 5)
                   .map((tech) => (

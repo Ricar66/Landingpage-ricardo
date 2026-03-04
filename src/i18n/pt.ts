@@ -73,6 +73,15 @@ const pt = {
     },
   },
 
+  // CTA
+  cta: {
+    eyebrow: "VAMOS TRABALHAR JUNTOS",
+    heading: "Tem um projeto em mente?",
+    description:
+      "Estou sempre aberto a novos desafios e oportunidades. Vamos construir algo incrível juntos.",
+    button: "Entre em contato",
+  },
+
   // Contact
   contact: {
     eyebrow: "CONTATO",
@@ -83,6 +92,9 @@ const pt = {
       name: "Nome",
       email: "E-mail",
       message: "Mensagem",
+      namePlaceholder: "seu nome completo",
+      emailPlaceholder: "seu@email.com",
+      messagePlaceholder: "conte-me sobre seu projeto...",
       send: "Enviar Mensagem",
       sending: "Enviando...",
       success: "Mensagem enviada com sucesso!",
