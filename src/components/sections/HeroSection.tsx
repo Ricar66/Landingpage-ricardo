@@ -10,7 +10,7 @@ import MagneticWrapper from "@/components/molecules/MagneticWrapper";
 import Button from "@/components/atoms/Button";
 import Image from "next/image";
 import { ArrowDown, Download } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 const marqueeItems = [
   "REACT",
@@ -33,6 +33,14 @@ export default function HeroSection() {
   const { t } = useTranslation();
   const ref = useRef<HTMLElement>(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [showHeavyEffects, setShowHeavyEffects] = useState(false);
+
+  // Defer heavy effects (blobs, geometric shapes) until after initial paint
+  useEffect(() => {
+    const timer = setTimeout(() => setShowHeavyEffects(true), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
@@ -47,32 +55,35 @@ export default function HeroSection() {
       id="hero"
       className="relative min-h-screen flex flex-col justify-center overflow-hidden"
     >
-      {/* Video Background */}
+      {/* Video Background — lazy loaded for performance */}
       <div className="absolute inset-0 z-0">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster="/images/Design sem nome.png"
-          onLoadedData={() => setVideoLoaded(true)}
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{
-            animation: videoLoaded ? "video-fade-in 1.5s ease-out forwards" : undefined,
-            opacity: videoLoaded ? 1 : 0,
-          }}
-        >
-          <source src="/images/download.mp4" type="video/mp4" />
-        </video>
-        {/* Poster fallback while video loads */}
-        {!videoLoaded && (
-          <Image
-            src="/images/Design sem nome.png"
-            alt=""
-            fill
-            className="object-cover"
-            priority
-          />
+        {/* Static poster shown immediately */}
+        <Image
+          src="/images/Design sem nome.png"
+          alt=""
+          fill
+          className="object-cover"
+          priority
+          style={{ opacity: videoLoaded ? 0 : 1, transition: "opacity 1s ease" }}
+        />
+        {/* Video loads after initial paint */}
+        {showHeavyEffects && (
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            onLoadedData={() => setVideoLoaded(true)}
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{
+              opacity: videoLoaded ? 1 : 0,
+              transition: "opacity 1.5s ease-out",
+              willChange: "opacity",
+            }}
+          >
+            <source src="/images/download.mp4" type="video/mp4" />
+          </video>
         )}
         {/* Heavy dark overlay for text legibility */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/90" />
@@ -83,70 +94,80 @@ export default function HeroSection() {
       {/* Dot grid background with parallax */}
       <motion.div className="absolute inset-0 dot-grid opacity-30" style={{ y: bgY }} />
 
-      {/* Mesh gradient — multi-blob background (reduced opacity to blend with video) */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Blue blob — top left */}
-        <motion.div
-          className="absolute -top-[20%] -left-[10%] w-[600px] h-[600px] md:w-[900px] md:h-[900px] rounded-full"
-          style={{
-            background: "radial-gradient(circle, rgba(59,130,246,0.10) 0%, transparent 70%)",
-            filter: "blur(80px)",
-          }}
-          animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-        />
-        {/* Purple blob — center right */}
-        <motion.div
-          className="absolute top-[10%] -right-[15%] w-[500px] h-[500px] md:w-[700px] md:h-[700px] rounded-full"
-          style={{
-            background: "radial-gradient(circle, rgba(139,92,246,0.07) 0%, transparent 70%)",
-            filter: "blur(80px)",
-          }}
-          animate={{ x: [0, -30, 0], y: [0, 40, 0] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        />
-        {/* Cyan blob — bottom left */}
-        <motion.div
-          className="absolute -bottom-[10%] left-[10%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full"
-          style={{
-            background: "radial-gradient(circle, rgba(6,182,212,0.05) 0%, transparent 70%)",
-            filter: "blur(80px)",
-          }}
-          animate={{ x: [0, 35, 0], y: [0, -25, 0] }}
-          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-        />
-      </div>
+      {/* Mesh gradient blobs + geometric shapes — deferred for performance */}
+      {showHeavyEffects && (
+        <>
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            {/* Blue blob — top left (uses will-change for GPU compositing) */}
+            <motion.div
+              className="absolute -top-[20%] -left-[10%] w-[600px] h-[600px] md:w-[900px] md:h-[900px] rounded-full"
+              style={{
+                background: "radial-gradient(circle, rgba(59,130,246,0.10) 0%, transparent 70%)",
+                filter: "blur(80px)",
+                willChange: "transform",
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, x: [0, 40, 0], y: [0, 30, 0] }}
+              transition={{ opacity: { duration: 1 }, x: { duration: 20, repeat: Infinity, ease: "easeInOut" }, y: { duration: 20, repeat: Infinity, ease: "easeInOut" } }}
+            />
+            {/* Purple blob — center right */}
+            <motion.div
+              className="absolute top-[10%] -right-[15%] w-[500px] h-[500px] md:w-[700px] md:h-[700px] rounded-full"
+              style={{
+                background: "radial-gradient(circle, rgba(139,92,246,0.07) 0%, transparent 70%)",
+                filter: "blur(80px)",
+                willChange: "transform",
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, x: [0, -30, 0], y: [0, 40, 0] }}
+              transition={{ opacity: { duration: 1 }, x: { duration: 25, repeat: Infinity, ease: "easeInOut" }, y: { duration: 25, repeat: Infinity, ease: "easeInOut" } }}
+            />
+            {/* Cyan blob — bottom left */}
+            <motion.div
+              className="absolute -bottom-[10%] left-[10%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full"
+              style={{
+                background: "radial-gradient(circle, rgba(6,182,212,0.05) 0%, transparent 70%)",
+                filter: "blur(80px)",
+                willChange: "transform",
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, x: [0, 35, 0], y: [0, -25, 0] }}
+              transition={{ opacity: { duration: 1 }, x: { duration: 22, repeat: Infinity, ease: "easeInOut" }, y: { duration: 22, repeat: Infinity, ease: "easeInOut" } }}
+            />
+          </div>
 
-      {/* Floating geometric shapes */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-[15%] right-[8%] w-20 h-20 md:w-28 md:h-28 opacity-[0.07]"
-          animate={{ y: [-10, 10, -10], rotate: [0, 5, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1">
-            <polygon points="50,5 95,95 5,95" className="text-accent" />
-          </svg>
-        </motion.div>
+          {/* Floating geometric shapes */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <motion.div
+              className="absolute top-[15%] right-[8%] w-20 h-20 md:w-28 md:h-28 opacity-[0.07]"
+              animate={{ y: [-10, 10, -10], rotate: [0, 5, 0] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1">
+                <polygon points="50,5 95,95 5,95" className="text-accent" />
+              </svg>
+            </motion.div>
 
-        <motion.div
-          className="absolute bottom-[30%] left-[5%] w-16 h-16 rounded-full border border-white/[0.04]"
-          animate={{ y: [5, -15, 5], scale: [1, 1.05, 1] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        />
+            <motion.div
+              className="absolute bottom-[30%] left-[5%] w-16 h-16 rounded-full border border-white/[0.04]"
+              animate={{ y: [5, -15, 5], scale: [1, 1.05, 1] }}
+              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            />
 
-        <motion.div
-          className="absolute top-[20%] left-[15%] w-2 h-2 rounded-full bg-accent/20"
-          animate={{ opacity: [0.2, 0.5, 0.2] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        />
+            <motion.div
+              className="absolute top-[20%] left-[15%] w-2 h-2 rounded-full bg-accent/20"
+              animate={{ opacity: [0.2, 0.5, 0.2] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            />
 
-        <motion.div
-          className="absolute bottom-[40%] right-[12%] w-1.5 h-1.5 rounded-full bg-accent/30"
-          animate={{ opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        />
-      </div>
+            <motion.div
+              className="absolute bottom-[40%] right-[12%] w-1.5 h-1.5 rounded-full bg-accent/30"
+              animate={{ opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            />
+          </div>
+        </>
+      )}
 
       {/* Main content */}
       <motion.div
