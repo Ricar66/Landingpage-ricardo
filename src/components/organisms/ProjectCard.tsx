@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { fadeInUp } from "@/lib/animations";
 import TiltCard from "@/components/molecules/TiltCard";
 import GlassTag from "@/components/atoms/GlassTag";
+import Image from "next/image";
 import { Github, Star, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -87,15 +88,31 @@ export default function ProjectCard({
               </span>
             </div>
 
-            {/* Gradient visual placeholder */}
+            {/* Visual preview area */}
             <div
               className={cn(
                 "relative overflow-hidden transition-transform duration-700 group-hover:scale-105",
                 featured ? "h-48 md:h-56" : "h-32"
               )}
             >
-              {/* Featured card: video background */}
-              {featured ? (
+              {/* Real screenshot if thumbnail exists */}
+              {project.thumbnail ? (
+                <>
+                  <Image
+                    src={project.thumbnail}
+                    alt={project.title}
+                    width={800}
+                    height={450}
+                    className="absolute inset-0 w-full h-full object-cover object-top"
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background: `linear-gradient(135deg, ${accent}15 0%, transparent 50%, ${accent}08 100%)`,
+                    }}
+                  />
+                </>
+              ) : featured ? (
                 <>
                   <video
                     autoPlay
@@ -115,14 +132,12 @@ export default function ProjectCard({
                 </>
               ) : (
                 <>
-                  {/* Colorful gradient based on project accent */}
                   <div
                     className="absolute inset-0"
                     style={{
                       background: `linear-gradient(135deg, ${accent}20 0%, ${accent}05 40%, rgba(0,0,0,0.8) 100%)`,
                     }}
                   />
-                  {/* Dot grid overlay */}
                   <div className="absolute inset-0 dot-grid opacity-30" />
                 </>
               )}
@@ -130,26 +145,28 @@ export default function ProjectCard({
               {/* Bottom fade to card bg */}
               <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
 
-              {/* Decorative code lines */}
-              <div className="absolute inset-0 p-4 opacity-20 group-hover:opacity-30 transition-opacity duration-500">
-                <div className="flex flex-col gap-2">
-                  <div className="flex gap-2">
-                    <div className="h-2 rounded-full bg-white/20" style={{ width: "30%" }} />
-                    <div className="h-2 rounded-full" style={{ width: "20%", backgroundColor: `${accent}40` }} />
-                  </div>
-                  <div className="flex gap-2 pl-4">
-                    <div className="h-2 rounded-full bg-white/10" style={{ width: "40%" }} />
-                    <div className="h-2 rounded-full bg-white/15" style={{ width: "15%" }} />
-                  </div>
-                  <div className="flex gap-2 pl-4">
-                    <div className="h-2 rounded-full" style={{ width: "25%", backgroundColor: `${accent}25` }} />
-                    <div className="h-2 rounded-full bg-white/10" style={{ width: "35%" }} />
-                  </div>
-                  <div className="flex gap-2">
-                    <div className="h-2 rounded-full bg-white/15" style={{ width: "20%" }} />
+              {/* Decorative code lines (only when no real screenshot) */}
+              {!project.thumbnail && (
+                <div className="absolute inset-0 p-4 opacity-20 group-hover:opacity-30 transition-opacity duration-500">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-2">
+                      <div className="h-2 rounded-full bg-white/20" style={{ width: "30%" }} />
+                      <div className="h-2 rounded-full" style={{ width: "20%", backgroundColor: `${accent}40` }} />
+                    </div>
+                    <div className="flex gap-2 pl-4">
+                      <div className="h-2 rounded-full bg-white/10" style={{ width: "40%" }} />
+                      <div className="h-2 rounded-full bg-white/15" style={{ width: "15%" }} />
+                    </div>
+                    <div className="flex gap-2 pl-4">
+                      <div className="h-2 rounded-full" style={{ width: "25%", backgroundColor: `${accent}25` }} />
+                      <div className="h-2 rounded-full bg-white/10" style={{ width: "35%" }} />
+                    </div>
+                    <div className="flex gap-2">
+                      <div className="h-2 rounded-full bg-white/15" style={{ width: "20%" }} />
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 

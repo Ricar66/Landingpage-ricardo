@@ -107,6 +107,64 @@ const pt = {
     },
   },
 
+  // Testimonials
+  testimonials: {
+    eyebrow: "DEPOIMENTOS",
+    heading: "O que dizem sobre mim",
+    description:
+      "Feedback de colegas e parceiros com quem tive o prazer de trabalhar.",
+    items: {
+      t1: {
+        quote:
+          "Ricardo é um desenvolvedor extremamente dedicado e criativo. Sua capacidade de transformar ideias complexas em soluções elegantes é impressionante.",
+        name: "Rafael Mendes",
+        role: "Tech Lead — CodeCraftGenZ",
+      },
+      t2: {
+        quote:
+          "Trabalhar com o Ricardo foi uma experiência incrível. Ele entrega com qualidade, no prazo, e sempre vai além do esperado.",
+        name: "Ana Luísa Costa",
+        role: "Product Designer",
+      },
+      t3: {
+        quote:
+          "O comprometimento do Ricardo com código limpo e boas práticas faz dele um profissional diferenciado. Recomendo sem hesitar.",
+        name: "Carlos Silva",
+        role: "Senior Developer",
+      },
+    },
+  },
+
+  // Process
+  process: {
+    eyebrow: "PROCESSO",
+    heading: "Como eu trabalho",
+    description:
+      "Uma abordagem estruturada para transformar ideias em produtos digitais de alta qualidade.",
+    steps: {
+      discovery: {
+        title: "Descoberta",
+        description:
+          "Entendo o problema, pesquiso o mercado e defino os requisitos e objetivos do projeto.",
+      },
+      design: {
+        title: "Design",
+        description:
+          "Crio wireframes e protótipos focados em experiência do usuário e interface intuitiva.",
+      },
+      develop: {
+        title: "Desenvolvimento",
+        description:
+          "Codifico com as melhores práticas, código limpo e tecnologias modernas.",
+      },
+      deploy: {
+        title: "Deploy",
+        description:
+          "Testo, otimizo e lanço o produto com monitoramento e suporte contínuo.",
+      },
+    },
+  },
+
   // Footer
   footer: {
     made: "Feito com",

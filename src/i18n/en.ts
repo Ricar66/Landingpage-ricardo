@@ -102,6 +102,62 @@ const en: Translations = {
     },
   },
 
+  testimonials: {
+    eyebrow: "TESTIMONIALS",
+    heading: "What people say",
+    description:
+      "Feedback from colleagues and partners I've had the pleasure of working with.",
+    items: {
+      t1: {
+        quote:
+          "Ricardo is an extremely dedicated and creative developer. His ability to turn complex ideas into elegant solutions is impressive.",
+        name: "Rafael Mendes",
+        role: "Tech Lead — CodeCraftGenZ",
+      },
+      t2: {
+        quote:
+          "Working with Ricardo was an incredible experience. He delivers quality work, on time, and always goes above and beyond.",
+        name: "Ana Luísa Costa",
+        role: "Product Designer",
+      },
+      t3: {
+        quote:
+          "Ricardo's commitment to clean code and best practices makes him a standout professional. I recommend him without hesitation.",
+        name: "Carlos Silva",
+        role: "Senior Developer",
+      },
+    },
+  },
+
+  process: {
+    eyebrow: "PROCESS",
+    heading: "How I work",
+    description:
+      "A structured approach to turning ideas into high-quality digital products.",
+    steps: {
+      discovery: {
+        title: "Discovery",
+        description:
+          "Understand the problem, research the market, and define project requirements and goals.",
+      },
+      design: {
+        title: "Design",
+        description:
+          "Create wireframes and prototypes focused on user experience and intuitive interfaces.",
+      },
+      develop: {
+        title: "Develop",
+        description:
+          "Code with best practices, clean architecture, and modern technologies.",
+      },
+      deploy: {
+        title: "Deploy",
+        description:
+          "Test, optimize, and launch the product with continuous monitoring and support.",
+      },
+    },
+  },
+
   footer: {
     made: "Made with",
     and: "and lots of coffee",
