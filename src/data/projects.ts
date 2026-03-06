@@ -8,7 +8,7 @@ export const projects: Project[] = [
       "Plataforma marketplace que conecta desenvolvedores juniores a empresas para projetos reais de desenvolvimento.",
     longDescription:
       "Plataforma full-stack com marketplace de aplicações, sistema de pagamentos integrado com Mercado Pago (PIX, cartão, boleto), licenciamento hardware-locked, geração de NFS-e, dashboard administrativo completo e sistema de desafios/ranking para desenvolvedores.",
-    thumbnail: "/images/projects/codecraftgenz.webp",
+    thumbnail: "/images/projects/codecraftgenz.mp4",
     technologies: [
       "React",
       "TypeScript",
@@ -40,7 +40,7 @@ export const projects: Project[] = [
       "Plataforma inteligente de estudo com repetição espaçada SM-2 e 4 modos de quiz.",
     longDescription:
       "Aplicação desktop para criação de bancos de questões customizados, estudo com algoritmo de repetição espaçada SM-2, e acompanhamento de performance através de dashboards visuais. 100% offline com backup automático.",
-    thumbnail: "/images/projects/quizcraft.webp",
+    thumbnail: "/images/projects/quizcraft.png",
     technologies: [".NET 9", "WPF", "C#", "SQLite", "MVVM", "xUnit"],
     category: "desktop",
     year: 2025,
@@ -60,7 +60,7 @@ export const projects: Project[] = [
       "Gerenciador de tarefas desktop cross-platform com editor markdown.",
     longDescription:
       "Aplicação desktop construída com Tauri 2 para gerenciamento de tarefas e notas, com editor markdown rico, state management via Zustand e interface moderna com Tailwind CSS.",
-    thumbnail: "/images/projects/deskcraft.webp",
+    thumbnail: "/images/projects/deskcraft.png",
     technologies: [
       "Tauri 2",
       "React",
@@ -86,7 +86,7 @@ export const projects: Project[] = [
       "Cofre pessoal de documentos offline com busca full-text instantânea.",
     longDescription:
       "Aplicação desktop para organizar documentos, notas e checklists com anexos. Busca full-text via FTS5, pastas hierárquicas ilimitadas, backup em 1 clique, exportação HTML/PDF/CSV e log de auditoria completo. 100% offline.",
-    thumbnail: "/images/projects/vaultcraft.webp",
+    thumbnail: "/images/projects/vaultcraft.png",
     technologies: [
       "Tauri 2",
       "React",
@@ -114,7 +114,7 @@ export const projects: Project[] = [
       "Sistema de gestão financeira pessoal com dashboards interativos.",
     longDescription:
       "Aplicação WPF robusta para controle de finanças pessoais com dashboards interativos (LiveCharts), importação OFX/CSV para conciliação bancária, metas orçamentárias e automação de transações recorrentes.",
-    thumbnail: "/images/projects/coincraft.webp",
+    thumbnail: "/images/projects/coincraft.png",
     technologies: [
       ".NET 8",
       "WPF",
@@ -141,7 +141,7 @@ export const projects: Project[] = [
       "Launcher central do ecossistema Craft com download e licenciamento automático.",
     longDescription:
       "Hub central para todas as aplicações CodeCraft. Usuários podem visualizar apps disponíveis, baixar/instalar com um clique, abrir apps instalados, receber notificações de atualização e gerenciar licenças automaticamente.",
-    thumbnail: "/images/projects/codecrafthub.webp",
+    thumbnail: "/images/projects/codecrafthub.png",
     technologies: [
       "Tauri 2",
       "React",

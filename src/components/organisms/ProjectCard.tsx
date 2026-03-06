@@ -95,8 +95,26 @@ export default function ProjectCard({
                 featured ? "h-48 md:h-56" : "h-32"
               )}
             >
-              {/* Real screenshot if thumbnail exists */}
-              {project.thumbnail ? (
+              {/* Real screenshot/video if thumbnail exists */}
+              {project.thumbnail?.endsWith(".mp4") ? (
+                <>
+                  <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-700"
+                  >
+                    <source src={project.thumbnail} type="video/mp4" />
+                  </video>
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background: `linear-gradient(135deg, ${accent}20 0%, transparent 50%, ${accent}10 100%)`,
+                    }}
+                  />
+                </>
+              ) : project.thumbnail ? (
                 <>
                   <Image
                     src={project.thumbnail}
@@ -109,24 +127,6 @@ export default function ProjectCard({
                     className="absolute inset-0"
                     style={{
                       background: `linear-gradient(135deg, ${accent}15 0%, transparent 50%, ${accent}08 100%)`,
-                    }}
-                  />
-                </>
-              ) : featured ? (
-                <>
-                  <video
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-700"
-                  >
-                    <source src="/images/Design sem nome.mp4" type="video/mp4" />
-                  </video>
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      background: `linear-gradient(135deg, ${accent}30 0%, transparent 50%, ${accent}10 100%)`,
                     }}
                   />
                 </>
