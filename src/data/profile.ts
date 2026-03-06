@@ -16,7 +16,7 @@ export const profile: ProfileData = {
     },
     {
       name: "GitHub",
-      url: "https://github.com/ricardomoretti",
+      url: "https://github.com/Ricar66",
       icon: "github",
     },
     {

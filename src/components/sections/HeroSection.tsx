@@ -9,7 +9,7 @@ import MarqueeStrip from "@/components/molecules/MarqueeStrip";
 import MagneticWrapper from "@/components/molecules/MagneticWrapper";
 import Button from "@/components/atoms/Button";
 import Image from "next/image";
-import { ArrowDown, Download } from "lucide-react";
+import { ArrowDown, Download, Github, Linkedin, Globe } from "lucide-react";
 import { useRef, useState } from "react";
 
 
@@ -129,6 +129,30 @@ export default function HeroSection() {
                   <Download size={16} />
                 </Button>
               </MagneticWrapper>
+            </motion.div>
+
+            {/* Social links */}
+            <motion.div variants={letterReveal} className="flex items-center gap-4 mt-8">
+              {profile.socialLinks.map((link) => {
+                const iconMap: Record<string, typeof Github> = {
+                  github: Github,
+                  linkedin: Linkedin,
+                  globe: Globe,
+                };
+                const Icon = iconMap[link.icon] || Globe;
+                return (
+                  <a
+                    key={link.name}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={link.name}
+                    className="w-10 h-10 rounded-full border border-white/[0.1] flex items-center justify-center text-text-muted hover:text-accent hover:border-accent/40 hover:bg-accent/[0.06] transition-all duration-300"
+                  >
+                    <Icon size={18} />
+                  </a>
+                );
+              })}
             </motion.div>
           </motion.div>
 
